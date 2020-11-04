@@ -1,11 +1,11 @@
 --> gcloud auth list
 --> gcloud config list project
 
-Query 1: Total Confirmed Cases
+# Query 1: Total Confirmed Cases
 
-SELECT sum(cumulative_confirmed) as total_cases_worldwide FROM `bigquery-public-data.covid19_open_data.covid19_open_data` where date='2020-04-15'
+--> SELECT sum(cumulative_confirmed) as total_cases_worldwide FROM `bigquery-public-data.covid19_open_data.covid19_open_data` where date='2020-04-15'
 
-Query 2: Worst Affected Areas
+# Query 2: Worst Affected Areas
 
 with deaths_by_states as (
 SELECT subregion1_name as state, sum(cumulative_deceased) as death_count
@@ -18,7 +18,7 @@ select count(*) as count_of_states
 from deaths_by_states
 where death_count > 100
 
-Query 3: Identifying Hotspots
+#Query 3: Identifying Hotspots
 
 SELECT subregion1_name as state, sum(cumulative_confirmed) as total_confirmed_cases 
 FROM `bigquery-public-data.covid19_open_data.covid19_open_data` 
@@ -27,13 +27,13 @@ group by subregion1_name
 having total_confirmed_cases > 1000
 order by total_confirmed_cases desc
 
-Query 4: Fatality Ratio
+#Query 4: Fatality Ratio
 
 SELECT SUM(cumulative_confirmed) AS total_confirmed_cases, SUM(cumulative_deceased) AS total_deaths, (SUM(cumulative_deceased)/SUM(cumulative_confirmed))*100 AS case_fatality_ratio
 FROM `bigquery-public-data.covid19_open_data.covid19_open_data`
 WHERE country_name="Italy" AND date BETWEEN "2020-04-01" AND "2020-04-30"
 
-Query 5: Identifying specific day
+#Query 5: Identifying specific day
 
 SELECT date
 FROM `bigquery-public-data.covid19_open_data.covid19_open_data` 
@@ -41,7 +41,7 @@ where country_name="Italy" and cumulative_deceased>10000
 order by date asc
 limit 1
 
-Query 6: Finding days with zero net new cases
+#Query 6: Finding days with zero net new cases
 
 WITH india_cases_by_date AS (
   SELECT
@@ -74,7 +74,7 @@ WHERE
   net_new_cases = 0
 
 
-Query 7: Doubling rate
+#Query 7: Doubling rate
 
 WITH us_cases_by_date AS (
   SELECT
@@ -111,7 +111,7 @@ WHERE
   percentage_increase > 10
 
 
-Query 8: Recovery rate
+#Query 8: Recovery rate
 
 WITH cases_by_country AS (
   SELECT
@@ -142,7 +142,7 @@ WHERE
 ORDER BY recovery_rate DESC
 LIMIT 10
 
-Query 9: CDGR - Cumulative Daily Growth Rate
+#Query 9: CDGR - Cumulative Daily Growth Rate
 
 WITH
   france_cases AS (
@@ -172,7 +172,7 @@ LIMIT 1
 select first_day_cases, last_day_cases, days_diff, POWER((last_day_cases/first_day_cases),(1/days_diff))-1 as cdgr
 from summary
 
-Create a Datastudio report
+#Create a Datastudio report
 
 SELECT
   date, SUM(cumulative_confirmed) AS country_cases,
